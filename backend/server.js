@@ -22,11 +22,14 @@ connectDB();
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/bookings', bookingRoutes);
 // app.use('/api/tutors', tutorRoutes); // This makes the URL /api/tutors
-
 const PORT = process.env.PORT || 5000;
 
-// 👇 Update this line exactly!
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on Port ${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n✅ SERVER STARTED successfully on PORT: ${PORT}`);
+    console.log(`🌐 Visit: http://localhost:${PORT} or your Render URL\n`);
 });
-// app.listen...
+
+// Handle server errors (like port in use)
+server.on('error', (err) => {
+    console.error("❌ Server Error:", err);
+});
