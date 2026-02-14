@@ -7,8 +7,14 @@ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express(); // ✅ 2. Initialize 'app' FIRST
 
-// 3. Now you can use app.use()
-app.use(cors());
+// ✅ ADD THIS INSTEAD:
+app.use(cors({
+    origin: [
+        "http://localhost:5173", 
+        "https://biconhub-frontend.onrender.com"
+    ],
+    credentials: true
+}));
 app.use(express.json());
 
 // 🔎 DEBUG SENSOR: Logs every single request
