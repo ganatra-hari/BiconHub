@@ -44,7 +44,7 @@ const TutorCard = ({ tutor }) => {
 
     try {
         // B. Send to Backend
-        const { data } = await axios.put(`http://localhost:5000/api/users/favorites/${userId}`, {
+        const { data } = await axios.put(`https://biconhub.onrender.com/api/users/favorites/${userId}`, {
             tutorId: tutorId // Send the actual ID
         });
 

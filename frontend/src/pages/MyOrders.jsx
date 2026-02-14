@@ -13,7 +13,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
         try {
             if (!activeUserId) return;
-            const { data } = await axios.get(`http://localhost:5000/api/bookings/user/${activeUserId}`);
+            const { data } = await axios.get(`https://biconhub.onrender.com/api/bookings/user/${activeUserId}`);
             setOrders(data);
         } catch (error) {
             console.error("Error fetching orders:", error);
@@ -30,7 +30,7 @@ const MyOrders = () => {
     const handleCancel = async (bookingId) => {
         if (window.confirm("Are you sure you want to cancel this class?")) {
             try {
-                await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`);
+                await axios.delete(`https://biconhub.onrender.com/api/bookings/${bookingId}`);
                 // Remove from screen immediately without refreshing
                 setOrders(orders.filter((order) => order._id !== bookingId));
                 alert("Booking Cancelled");

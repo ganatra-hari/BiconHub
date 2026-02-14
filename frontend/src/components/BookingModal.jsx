@@ -130,7 +130,7 @@ const handleConfirm = async () => {
     status: 'Confirmed'
   };
 
-  await axios.post('http://localhost:5000/api/bookings/create', bookingData);
+  await axios.post('https://biconhub.onrender.com/api/bookings/create', bookingData);
   navigate('/my-orders');
 };
   // --- SUBMIT BOOKING ---
@@ -193,7 +193,7 @@ const handleBooking = async () => {
     // --- 4. SEND TO SERVER ---
     try {
         // Ensure this URL matches your Server (try with or without /create if 404)
-        const { data } = await axios.post('http://localhost:5000/api/bookings', payload, config);
+        const { data } = await axios.post('https://biconhub.onrender.com/api/bookings', payload, config);
         
         if (data) { 
             console.log("✅ Server Response:", data);
