@@ -1,33 +1,50 @@
 const express = require('express');
-const cors = require('cors');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
 const app = express();
 
-// ----------------------------------------------
-// ✅ STEP 1: CRASH-PROOF CORS (Allow Everything)
-// ----------------------------------------------
-// This simple line allows ALL websites. No arrays, no complex rules.
-app.use(cors()); 
-
-// ✅ STEP 2: Middleware
-app.use(express.json());
-
-// 🔎 LOGGING: This prints to your Render logs so we know it's alive
+// =====================================================
+// 🛡️ MANUAL CORS OVERRIDE (Bypasses external packages)
+// =====================================================
 app.use((req, res, next) => {
-    console.log(`Incoming Request: ${req.method} ${req.url}`);
+    // 1. Allow everyone
+    res.header("Access-Control-Allow-Origin", "*");
+    
+    // 2. Allow specific headers
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    
+    // 3. Allow specific methods
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+    // 4. Handle the "Preflight" (Handshake) immediately
+    if (req.method === 'OPTIONS') {
+        return res.status(200).send({});
+    }
+    
     next();
 });
 
-// ✅ STEP 3: Database & Routes
+// =====================================================
+// 📡 LOGGING (To prove the request arrived)
+// =====================================================
+app.use((req, res, next) => {
+    console.log(`📡 HIT: ${req.method} ${req.url}`);
+    next();
+});
+
+// Middleware
+app.use(express.json());
+
+// Database
 connectDB();
 
+// Routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 
-// ✅ STEP 4: Server Start
+// Start Server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ SERVER IS ALIVE on Port ${PORT}`);
+    console.log(`\n✅ MANUAL SERVER RUNNING on Port ${PORT}`);
 });
