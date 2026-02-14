@@ -15,6 +15,8 @@ app.use(cors({
     credentials: true
 }));
 
+app.options('*', cors());
+
 app.use(express.json());
 
 // 🔎 DEBUG SENSOR: Logs every single request
