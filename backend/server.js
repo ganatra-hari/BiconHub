@@ -6,14 +6,14 @@ const bookingRoutes = require('./routes/bookingRoutes');
 // const tutorRoutes = require('./routes/tutorRoutes');
 
 const app = express(); // ✅ 2. Initialize 'app' FIRST
-// ✅ 1. CORS Configuration (Top of file)
+// ✅ SAFE VERSION (No crashes, No blocks)
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://biconhub-frontend.onrender.com"
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200 // <--- This handles the "Preflight" handshake safely
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        return callback(null, true); // Allow everyone
+    },
+    credentials: true
 }));
 
 // ✅ 2. Middleware
