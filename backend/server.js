@@ -23,5 +23,12 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/bookings', bookingRoutes);
 // app.use('/api/tutors', tutorRoutes); // This makes the URL /api/tutors
 
-const PORT = 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// ❌ OLD WAY (Broken on Render)
+// const PORT = 5000; 
+
+// ✅ NEW WAY (Works on Render AND Localhost)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
