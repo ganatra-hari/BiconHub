@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Added useState
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../firebase'; 
@@ -6,16 +6,19 @@ import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false); // 🛡️ Prevent double clicks
+  const [loading, setLoading] = useState(false);
 
- const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async () => {
+    setLoading(true); // ✅ 1. Start Loading (Disable button)
+    
     try {
         const result = await signInWithPopup(auth, provider);
         console.log("🔥 [FIREBASE] Success:", result.user.email);
 
-        // Line 32: We add a log before the call
         console.log("📡 [AXIOS] Sending sync to backend...");
-        const { data } = await axios.post('https://biconhub-backend.onrender.com/api/users/sync', {
+        
+        // ✅ 2. FIXED URL: Removed "-backend" to match your Render Service Name
+        const { data } = await axios.post('https://biconhub.onrender.com/api/users/sync', {
             name: result.user.displayName,
             email: result.user.email,
             image: result.user.photoURL,
@@ -28,10 +31,11 @@ const Login = () => {
         navigate('/');
         window.location.reload(); 
     } catch (error) {
-        // This prints the real reason Login fails in your browser console
         console.error("❌ [LOGIN ERROR]:", error.response?.data || error.message);
+        alert("Login Failed. Please check console for details."); // Added alert so you know if it fails
+        setLoading(false); // ✅ 3. Stop Loading if error happens
     }
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -40,7 +44,7 @@ const Login = () => {
         
         <button 
           onClick={handleGoogleLogin}
-          disabled={loading} // Disable button while processing
+          disabled={loading}
           className={`w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}`}
         >
           {loading ? (
