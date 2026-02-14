@@ -7,14 +7,14 @@ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express(); // ✅ 2. Initialize 'app' FIRST
 
-// ✅ ADD THIS INSTEAD:
 app.use(cors({
     origin: [
-        "http://localhost:5173", 
-        "https://biconhub-frontend.onrender.com"
+        "http://localhost:5173",                      // Allow local testing
+        "https://biconhub-frontend.onrender.com"      // Allow live frontend
     ],
     credentials: true
 }));
+
 app.use(express.json());
 
 // 🔎 DEBUG SENSOR: Logs every single request
