@@ -23,15 +23,10 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/bookings', bookingRoutes);
 // app.use('/api/tutors', tutorRoutes); // This makes the URL /api/tutors
 
-// ❌ OLD WAY (Broken on Render)
-// const PORT = 5000; 
-
-// ✅ NEW WAY (Works on Render AND Localhost)
 const PORT = process.env.PORT || 5000;
 
-// ✅ Add this simple route to test if the server is running
-app.get('/', (req, res) => {
-    res.send("API is running successfully! 🚀");
+// 👇 Update this line exactly!
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on Port ${PORT}`);
 });
-
 // app.listen...
