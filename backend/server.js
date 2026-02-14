@@ -1,43 +1,33 @@
-const express = require('express'); // 1. Import Express
+const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-const bookingRoutes = require('./routes/bookingRoutes');
-// const tutorRoutes = require('./routes/tutorRoutes');
+require('dotenv').config();
 
-const app = express(); // ✅ 2. Initialize 'app' FIRST
-// ✅ SAFE VERSION (No crashes, No blocks)
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        return callback(null, true); // Allow everyone
-    },
-    credentials: true
-}));
+const app = express();
 
-// ✅ 2. Middleware
+// ----------------------------------------------
+// ✅ STEP 1: CRASH-PROOF CORS (Allow Everything)
+// ----------------------------------------------
+// This simple line allows ALL websites. No arrays, no complex rules.
+app.use(cors()); 
+
+// ✅ STEP 2: Middleware
 app.use(express.json());
 
-// 🔎 DEBUG SENSOR: Logs every single request
+// 🔎 LOGGING: This prints to your Render logs so we know it's alive
 app.use((req, res, next) => {
-  console.log(`📡 [${new Date().toLocaleTimeString()}] ${req.method} to ${req.url}`);
-  next();
+    console.log(`Incoming Request: ${req.method} ${req.url}`);
+    next();
 });
 
+// ✅ STEP 3: Database & Routes
 connectDB();
 
 app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/bookings', bookingRoutes);
-// app.use('/api/tutors', tutorRoutes); // This makes the URL /api/tutors
-const PORT = process.env.PORT || 5000;
+app.use('/api/bookings', require('./routes/bookingRoutes'));
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n✅ SERVER STARTED successfully on PORT: ${PORT}`);
-    console.log(`🌐 Visit: http://localhost:${PORT} or your Render URL\n`);
-});
-
-// Handle server errors (like port in use)
-server.on('error', (err) => {
-    console.error("❌ Server Error:", err);
+// ✅ STEP 4: Server Start
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ SERVER IS ALIVE on Port ${PORT}`);
 });
