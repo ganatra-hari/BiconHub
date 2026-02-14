@@ -29,6 +29,9 @@ app.use('/api/bookings', bookingRoutes);
 // ✅ NEW WAY (Works on Render AND Localhost)
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// ✅ Add this simple route to test if the server is running
+app.get('/', (req, res) => {
+    res.send("API is running successfully! 🚀");
 });
+
+// app.listen...
