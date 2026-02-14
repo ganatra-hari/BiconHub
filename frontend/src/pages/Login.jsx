@@ -15,7 +15,7 @@ const Login = () => {
 
         // Line 32: We add a log before the call
         console.log("📡 [AXIOS] Sending sync to backend...");
-        const { data } = await axios.post('http://localhost:5000/api/users/sync', {
+        const { data } = await axios.post('https://biconhub-backend.onrender.com/api/users/sync', {
             name: result.user.displayName,
             email: result.user.email,
             image: result.user.photoURL,
