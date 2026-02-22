@@ -6,6 +6,7 @@ import SearchTutors from './pages/SearchTutors';
 import MyOrders from './pages/MyOrders';
 import Favorites from './pages/Favorites';
 import Login from './pages/Login';
+import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/ProtectedRoute'; // Adjust path if needed
 
 function App() {
