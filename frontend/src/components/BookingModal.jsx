@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { X, Calendar, Clock, CheckCircle, Loader, AlertTriangle, Smartphone, CreditCard, Receipt, FileText } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const BookingModal = ({ isOpen, onClose, tutor, user }) => {
   const navigate = useNavigate();
@@ -149,13 +150,14 @@ const handleBooking = async () => {
     const activeUserId = currentUser?._id || currentUser?.id;
 
     if (!activeUserId) {
-        alert("❌ Error: User ID not found. Please log out and log in again.");
+        toast.error("Error: User ID not found. Please log out and log in again.");
         console.error("CRITICAL: No User ID found in localStorage!");
         return; // 🛑 STOP HERE (Don't crash the server)
     }
 
     // --- 3. PREPARE DATA ---
     setLoading(true);
+    const toastId = toast.loading('Processing your booking...'); // ⏳ Trigger loading toast
 
     // 🛡️ TUTOR ID FALLBACK:
     // If tutor._id is missing (because it's hardcoded), use a random string so the backend doesn't crash.
@@ -197,13 +199,16 @@ const handleBooking = async () => {
         
         if (data) { 
             console.log("✅ Server Response:", data);
-            alert("✅ Booking Confirmed!"); 
+            toast.success("Booking Confirmed! 🎉", { id: toastId }); // ✅ Success toast replaces alert
             onClose(); 
-            navigate('/my-orders'); 
+            // Optional: Give it 1.5 seconds so the user can read the success message before switching pages
+            setTimeout(() => {
+              navigate('/my-orders'); 
+            }, 1500);
         }
     } catch (error) {
         console.error("❌ BOOKING ERROR:", error.response?.data || error.message);
-        alert(`Booking Failed: ${error.response?.data?.message || "Server Error"}`);
+        toast.error(`Booking Failed: ${error.response?.data?.message || "Server Error"}`, { id: toastId }); // ❌ Error toast replaces alert
     } finally { 
         setLoading(false); 
     }
@@ -261,9 +266,9 @@ const handleBooking = async () => {
                  ))}
               </div>
               <select className="w-full mt-4 p-3 bg-blue-50 border border-blue-100 rounded-xl font-bold text-sm text-blue-800 outline-none" value={plan} onChange={(e) => setPlan(e.target.value)}>
-                  <option value="monthly">Monthly Plan</option>
-                  <option value="6months">6 Months (10% Off)</option>
-                  <option value="yearly">1 Year (20% Off)</option>
+                 <option value="monthly">Monthly Plan</option>
+                 <option value="6months">6 Months (10% Off)</option>
+                 <option value="yearly">1 Year (20% Off)</option>
               </select>
            </div>
         )}
