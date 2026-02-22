@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../firebase'; 
-import api from './api';
+import api from '../api';
 
 const Login = () => {
   const navigate = useNavigate();
