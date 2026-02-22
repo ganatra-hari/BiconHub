@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../firebase'; 
-import axios from 'axios';
+import axios from '../api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Login = () => {
         console.log("📡 [AXIOS] Sending sync to backend...");
         
         // ✅ 2. FIXED URL: Removed "-backend" to match your Render Service Name
-        const { data } = await axios.post('https://biconhub.onrender.com/api/users/sync', {
+        const { data } = await api.post('/api/users/sync', {
             name: result.user.displayName,
             email: result.user.email,
             image: result.user.photoURL,
